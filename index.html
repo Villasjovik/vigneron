@@ -539,6 +539,30 @@ box-shadow:
   .price-box{padding:36px 24px}
 }
 
+/* META — KONVERTERINGSKEDJA */
+#sec-meta{position:relative;background:radial-gradient(ellipse 90% 80% at 50% 50%,var(--bg3) 0%,var(--bg) 70%);padding:120px 24px 110px;overflow:hidden}
+#sec-meta::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(212,168,75,.04),transparent 70%)}
+.meta-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1}
+.meta-intro{font-family:'Playfair Display',serif;font-style:italic;color:var(--warm);font-size:clamp(16px,2.1vw,21px);line-height:1.55;max-width:780px;margin:-24px 0 60px}
+.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-bottom:64px}
+.meta-c{background:rgba(28,22,18,.45);border:1px solid rgba(212,168,75,.16);padding:38px 30px 34px;border-radius:16px;position:relative;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:border-color .5s var(--ease),transform .5s var(--ease),box-shadow .5s var(--ease)}
+.meta-c::before{content:'';position:absolute;top:0;left:0;width:34%;height:1px;background:linear-gradient(90deg,var(--gold),transparent);opacity:.7}
+.meta-c:hover{border-color:rgba(212,168,75,.32);transform:translateY(-3px);box-shadow:0 22px 50px rgba(0,0,0,.4),0 0 60px rgba(212,168,75,.06)}
+.meta-num{font-family:'Playfair Display',serif;font-size:12px;letter-spacing:.22em;color:var(--gold);margin-bottom:22px;font-weight:500;text-transform:uppercase}
+.meta-h3{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;color:var(--ink);margin-bottom:14px;line-height:1.2;letter-spacing:-.005em}
+.meta-body{font-size:13px;line-height:1.85;color:var(--muted)}
+.meta-kicker{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(18px,2.4vw,24px);color:var(--warm);max-width:820px;line-height:1.55;padding-top:36px;border-top:1px solid rgba(212,168,75,.12)}
+.meta-kicker em{color:var(--gold);font-style:italic}
+@media(max-width:880px){
+  #sec-meta{padding:84px 16px 76px}
+  .meta-grid{grid-template-columns:1fr;gap:14px;margin-bottom:48px}
+  .meta-c{padding:28px 22px}
+  .meta-intro{margin:-12px 0 40px}
+  .meta-kicker{padding-top:28px}
+}
+
 /* CTA */
 #sec-cta{position:relative;min-height:88vh;display:flex;align-items:center;justify-content:center;
 text-align:center;overflow:hidden;
@@ -963,6 +987,35 @@ position:relative;overflow:hidden;transition:color .35s}
 
 <div class="gd"></div>
 
+<!-- META — KONVERTERINGSKEDJA -->
+<section id="sec-meta">
+  <div class="meta-inner">
+    <p class="sec-lbl rv">Effekten bakom</p>
+    <h2 class="sec-h2 rv">Mer än räckvidd. <em>Konvertering.</em></h2>
+    <p class="meta-intro rv">Skillnaden mellan ett samarbete som ger likes och ett som ger sälj ligger i vad som händer efter publiceringen. Vi bygger inte bara berättelsen &mdash; vi sluter cirkeln.</p>
+    <div class="meta-grid">
+      <div class="meta-c rv d1">
+        <p class="meta-num">01</p>
+        <h3 class="meta-h3">Berättelsen publiceras</h3>
+        <p class="meta-body">Videon når Villa Sjöviks 194&nbsp;000 följare i deras dagliga flöde. Naturlig kontakt, inte annons.</p>
+      </div>
+      <div class="meta-c rv d2">
+        <p class="meta-num">02</p>
+        <h3 class="meta-h3">Vi retargetar de som tittat</h3>
+        <p class="meta-body">Alla som sett videon förs in i en Meta-publik som tillhör Vigneron. Inget extra arbete från er sida.</p>
+      </div>
+      <div class="meta-c rv d3">
+        <p class="meta-num">03</p>
+        <h3 class="meta-h3">Vi möter dem igen</h3>
+        <p class="meta-body">En uppföljande annons i Vignerons varumärke &mdash; byggd av samma material &mdash; visas för exakt de personer som redan sett videon. Följaren blir besökaren, och besökaren blir köparen.</p>
+      </div>
+    </div>
+    <p class="meta-kicker rv">Det är där betalt samarbete betalar tillbaka &mdash; när varje <em>exponering har ett nästa steg.</em></p>
+  </div>
+</section>
+
+<div class="gd"></div>
+
 <!-- PRICING -->
 <section id="sec-pr">
   <div class="pr-orb pr-orb-1" aria-hidden="true"></div>
@@ -985,8 +1038,9 @@ position:relative;overflow:hidden;transition:color .35s}
 
     <div class="price-grid">
 
-      <!-- Startpaket -->
-      <div class="price-box rv d1">
+      <!-- Startpaket (featured — pilot för 2026) -->
+      <div class="price-box featured rv d1">
+        <span class="price-ribbon">Rekommenderat &middot; Pilot för 2026</span>
         <h3 class="price-title">Startpaket</h3>
         <p class="price-sub">1 video &middot; 2 stories med CTA &middot; 10 miljöbilder</p>
         <p class="price-total-lbl">Pris</p>
@@ -1001,9 +1055,9 @@ position:relative;overflow:hidden;transition:color .35s}
         </div>
       </div>
 
-      <!-- Kampanjpaket (featured) -->
-      <div class="price-box featured rv d2">
-        <span class="price-ribbon">Rekommenderat &middot; MEST VÄRDE</span>
+      <!-- Kampanjpaket — skala efter pilot -->
+      <div class="price-box rv d2">
+        <span class="price-ribbon ribbon-muted">Skala efter pilot</span>
         <h3 class="price-title">Kampanjpaket</h3>
         <p class="price-sub">3 videor &middot; 6 stories med CTA &middot; 30 miljöbilder</p>
         <p class="price-total-lbl">Pris</p>
@@ -1013,7 +1067,7 @@ position:relative;overflow:hidden;transition:color .35s}
         <div class="price-includes">
           <p class="pi hi">3 videor publicerade på Villa Sjöviks kanaler</p>
           <p class="pi hi">6 stories på Villa Sjöviks kanaler &mdash; direktlänk och CTA</p>
-          <p class="pi hi">30 miljöbilder för era egna kanaler och hemsida</p>
+          <p class="pi hi">30 miljöbilder &mdash; fördelade över olika ljus, tillfällen och perspektiv</p>
           <p class="pi">Full användarrätt till allt material</p>
           <p class="pi">Styling, foto och redigering inkluderat</p>
         </div>
@@ -1033,8 +1087,8 @@ position:relative;overflow:hidden;transition:color .35s}
   <div class="cta-inner">
     <p class="cta-tag rv">Vad händer härnäst?</p>
     <h2 class="rv">
-      <span class="cta-l1">Vi bokar in</span><br>
-      <em class="cta-l2">ett möte.</em>
+      <span class="cta-l1">Vi stämmer av</span><br>
+      <em class="cta-l2">när ni är redo.</em>
     </h2>
     <div class="cta-btns rv">
       <div class="mag-w">
@@ -1290,6 +1344,7 @@ if(spotSec){
       trackStart:()=>mqEl?(mqEl.getBoundingClientRect().top+window.scrollY):document.getElementById('sec-spar').getBoundingClientRect().top+window.scrollY
     },
     {id:'sec-profil',label:'Kanalen'},
+    {id:'sec-meta',label:'Effekten'},
     {id:'sec-pr',label:'Investering'},
     {id:'sec-cta',label:'Kontakt'}
   ].map(s=>({...s,el:document.getElementById(s.id)})).filter(s=>s.el);
