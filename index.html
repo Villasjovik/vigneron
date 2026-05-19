@@ -478,7 +478,23 @@ box-shadow:
 @media(max-width:700px){.sec-sublead{font-size:13px;margin-bottom:36px}}
 
 /* RÄCKVIDD-BOOST TOGGLE — ljusare skogsgrön + iOS-style switch, fast storlek */
-.ads-toggle{display:flex;justify-content:center;margin:-12px auto 44px;max-width:640px}
+.ads-toggle{display:flex;justify-content:center;margin:-12px auto 44px;max-width:640px;position:relative}
+
+/* Demo-hint badge (auto-demo over toggle) */
+.demo-hint{position:absolute;left:50%;top:-26px;transform:translate(-50%,-100%) translateY(8px);
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--gold);white-space:nowrap;pointer-events:none;z-index:5;
+  opacity:0;transition:opacity .55s var(--ease),transform .55s var(--ease);
+  filter:drop-shadow(0 0 12px rgba(212,168,75,.55))}
+.demo-hint.show{opacity:1;transform:translate(-50%,-100%) translateY(0)}
+.demo-hint-arrow{display:inline-block;font-size:14px;color:var(--gold2);letter-spacing:0;
+  animation:demoHintArrow 1.4s ease-in-out infinite}
+@keyframes demoHintArrow{0%,100%{transform:translateY(0);opacity:.7}50%{transform:translateY(4px);opacity:1}}
+@media(max-width:560px){
+  .demo-hint{font-size:9px;letter-spacing:.22em;gap:7px;top:-22px}
+  .demo-hint-arrow{font-size:12px}
+}
 .ads-pill{display:inline-flex;align-items:center;gap:16px;padding:13px 26px;
   background:rgba(8,68,36,.55);
   backdrop-filter:blur(28px) saturate(1.4);-webkit-backdrop-filter:blur(28px) saturate(1.4);
@@ -633,6 +649,13 @@ box-shadow:
 /* Kicker */
 .meta-kicker{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(17px,2.2vw,23px);color:var(--warm);max-width:720px;margin:0 auto;line-height:1.55;text-align:center}
 .meta-kicker em{color:var(--gold);font-style:italic}
+
+/* Anchor — visuell brygga till Investering-sektionen */
+.meta-anchor{margin:36px auto 0;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:rgba(212,168,75,.65);text-align:center;display:flex;align-items:center;justify-content:center;gap:14px}
+.meta-anchor-text{display:inline-block}
+.meta-anchor-arrow{display:inline-block;font-size:14px;color:var(--gold);animation:metaAnchorBob 2.4s ease-in-out infinite;letter-spacing:0}
+@keyframes metaAnchorBob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(5px);opacity:1}}
+@media(max-width:880px){.meta-anchor{font-size:9px;gap:10px;margin-top:28px;padding:0 8px}}
 
 @media(max-width:880px){
   #sec-meta{padding:88px 16px 80px}
@@ -1119,7 +1142,7 @@ position:relative;overflow:hidden;transition:color .35s}
             <div class="flow-node-dot">02</div>
           </div>
           <div class="flow-node-label">
-            <span class="flow-cap">Pixeln spårar tittarna</span>
+            <span class="flow-cap">Meta-pixel spårar tittarna</span>
             <span class="flow-sub">Vignerons publik byggs</span>
           </div>
         </div>
@@ -1130,7 +1153,7 @@ position:relative;overflow:hidden;transition:color .35s}
             <div class="flow-node-dot">03</div>
           </div>
           <div class="flow-node-label">
-            <span class="flow-cap">Annonsen följer dem</span>
+            <span class="flow-cap">Meta-annonsen följer dem</span>
             <span class="flow-sub">Följare &rarr; besökare &rarr; köpare</span>
           </div>
         </div>
@@ -1138,6 +1161,7 @@ position:relative;overflow:hidden;transition:color .35s}
     </div>
 
     <p class="meta-kicker rv">Betalt samarbete betalar tillbaka &mdash; när varje <em>exponering har ett nästa steg.</em></p>
+    <p class="meta-anchor rv"><span class="meta-anchor-text">Aktiveras med räckviddsförstärkning i nästa steg</span> <span class="meta-anchor-arrow" aria-hidden="true">↓</span></p>
   </div>
 </section>
 
@@ -1151,6 +1175,7 @@ position:relative;overflow:hidden;transition:color .35s}
     <h2 class="sec-h2 rv">Två vägar att bygga <em>berättelse och räckvidd.</em></h2>
 
     <div class="ads-toggle rv" id="ads-toggle-wrap">
+      <span class="demo-hint" id="ads-demo-hint" aria-hidden="true">Vi rekommenderar <span class="demo-hint-arrow">↓</span></span>
       <button class="ads-pill" id="ads-toggle" type="button" aria-pressed="false">
         <span class="ads-switch" aria-hidden="true"></span>
         <span class="ads-text">
@@ -1597,6 +1622,66 @@ if(spotSec){
       el.classList.add('boost-pulse');
     });
   });
+})();
+
+/* RÄCKVIDD-BOOST AUTO-DEMO — körs en gång per session när Investering-sektionen scrollas in */
+(function(){
+  const sec=document.getElementById('sec-pr');
+  const toggle=document.getElementById('ads-toggle');
+  const hint=document.getElementById('ads-demo-hint');
+  if(!sec||!toggle||!hint)return;
+
+  // Skip om sessionen redan sett demon
+  try{if(sessionStorage.getItem('vigneron-boost-demo-shown')==='true')return}catch(e){}
+
+  // Skip vid reduced motion
+  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+
+  let triggered=false, demoActive=false, demoInternal=false;
+  const tids=[];
+
+  function clearTids(){tids.forEach(id=>clearTimeout(id));tids.length=0}
+  function endDemo(){
+    hint.classList.remove('show');
+    demoActive=false;
+    try{sessionStorage.setItem('vigneron-boost-demo-shown','true')}catch(e){}
+  }
+
+  // Avbryt demo om user själv klickar på toggle
+  toggle.addEventListener('click',()=>{
+    if(demoActive&&!demoInternal){clearTids();endDemo()}
+  });
+
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting||triggered)return;
+      triggered=true;
+      obs.unobserve(e.target);
+
+      // 1.2s delay → visa hint
+      tids.push(setTimeout(()=>{
+        demoActive=true;
+        hint.classList.add('show');
+
+        // 0.4s senare → toggle ON (existing handler count:ar upp priserna)
+        tids.push(setTimeout(()=>{
+          if(!demoActive)return;
+          demoInternal=true;toggle.click();demoInternal=false;
+
+          // 3.0s pause med boost-pris visible
+          tids.push(setTimeout(()=>{
+            if(!demoActive)return;
+            demoInternal=true;toggle.click();demoInternal=false;
+
+            // 0.7s efter → fade ut hint, sätt session-flag
+            tids.push(setTimeout(()=>{endDemo()},700));
+          },3000));
+        },400));
+      },1200));
+    });
+  },{threshold:0.3});
+
+  obs.observe(sec);
 })();
 
 /* BOKNINGSFLOW */
